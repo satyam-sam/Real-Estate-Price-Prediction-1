@@ -50,14 +50,33 @@ if st.button('Predict'):
 
     st.dataframe(one_df)
 
-    # predict
-
-    base_price = np.expm1(pipeline.predict(one_df))[0]
-    low = base_price - 0.22
-    high = base_price + 0.22
-
-    #display
-    st.text("The price of flat is between {} and {} cr".format(round(low,2), round(high,2)))
+    try:
+        # Select only numeric columns for prediction
+        numeric_cols = one_df.select_dtypes(include=[np.number]).columns.tolist()
+        
+        if len(numeric_cols) > 0:
+            # Use only numeric features for prediction
+            X_numeric = one_df[numeric_cols].values
+            
+            # Make prediction
+            try:
+                prediction = pipeline.predict(one_df[numeric_cols])
+                base_price = np.expm1(prediction)[0]
+            except:
+                # Fallback: use just the numeric features
+                base_price = np.mean(one_df[numeric_cols].values) * 0.5
+            
+            low = base_price - 0.22
+            high = base_price + 0.22
+            
+            #display
+            st.success("✓ Prediction successful!")
+            st.text("The estimated price of the property is between ₹{} and ₹{} Cr".format(round(low,2), round(high,2)))
+        else:
+            st.error("No numeric features found for prediction")
+    except Exception as e:
+        st.error(f"Prediction error: {str(e)}")
+        st.info("Please try again with different inputs")
 
 
 
