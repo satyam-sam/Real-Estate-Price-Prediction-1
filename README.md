@@ -16,5 +16,4 @@ This project analyzes real estate data including apartments, houses, and flats t
 - **Model Selection & Optimization**: Testing and comparing different ML models
 - **Outlier Treatment**: Handling outliers in the data
 - **Baseline Models**: Building baseline models for comparison
-- **Recommender System**: Personalized property recommendations
 - **Interactive Dashboard**: Streamlit app for data visualization and analysis
